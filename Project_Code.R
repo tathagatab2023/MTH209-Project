@@ -1,5 +1,5 @@
 ####data cleaning
-df=data
+df=data   ## regression data xlsx
 ### here we clean the vectors contains NA values 
 ## because pca dont work if there are NA values
 vec <- ifelse(df$Total_Volume == "NA", NA, df$Total_Volume)   ###total volume
