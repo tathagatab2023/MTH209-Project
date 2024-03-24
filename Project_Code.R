@@ -45,12 +45,6 @@ d2[which(d2[,3] == "Fino Payments Bank Limited Fip"),3]="Fino Payments Bank"
 d2[which(d2[,3] == "Equitas Bank"),3]="Equitas Small Finance Bank"
 d2[which(d2[,3] == "Dbs Bank Ltd"),3] = "Dbs Bank India Limited"
 
-aggregate(d2[,5]~d2[,3],data=d2,length)
-aggregate(d1[,5]~d1[,3],data=d1,length)
-
-write.csv(d1,"Beneficiary_Bank_Data.csv")
-write.csv(d2,"Remitter_Bank_Data.csv")
-
 
 df=data   ## regression data xlsx
 ### here we clean the vectors contains NA values 
