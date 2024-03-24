@@ -1,4 +1,57 @@
 ####data cleaning
+d1 = read.csv("Beneficiary_Bank_Data.csv")[,-1]
+d2 = read.csv("Remitter_Bank_Data.csv")[,-1]
+
+head(d1)
+head(d2)
+
+
+d2[,5] = as.numeric(substr(d2[,5],1,5))
+d2[,6] = as.numeric(substr(d2[,6],1,4))
+d2[,7] = as.numeric(substr(d2[,7],1,4))
+#d1[,8] = as.numeric(substr(d1[,8],1,4))
+#head(d1)
+d2[,4] = gsub(",","",d2[,4])
+d2[,4] = as.numeric(d2[,4])
+
+d2[,9]=as.numeric(gsub("%","",d2[,9]))
+
+
+d2[,5] = d2[,5]*d2[,4]/100
+d2[,6] = d2[,6]*d2[,4]/100
+d2[,7] = d2[,7]*d2[,4]/100
+d2[,9] = d2[,9]*d2[,8]/100
+#d1[,8] = d1[,8]*d1[,4]/100
+head(d2)
+d2[49,]
+write.csv(d2,"Remitter_Bank_Data.csv")
+
+aggregate(d2[,5]~d2[,3],data=d2,length)
+aggregate(d1[,5]~d1[,3],data=d1,length)
+
+library(stringr)
+head(d1)
+d1[,3] = str_to_title(d1[,3])
+d2[,3] = str_to_title(d2[,3])
+d1 = read.csv("Beneficiary_Bank_Data.csv")[,-c(1:2)]
+head(d1)
+d2[which(d2[,3] == "Axis Bank Ltd."),3]="Axis Bank Ltd"
+d2[which(d2[,3] == "Citi"),3]="Citibank"
+d2[which(d2[,3] == "Citi Bank"),3] = "Citibank"
+d2[which(d2[,3] == "Rbl"),3]="Rbl Bank"
+d2[which(d2[,3] == "Tri O Tech Solutions Private Limited (Ppi)"),3]="Tri O Tech Solutions Private Limited"
+d2[which(d2[,3] == "Fino Payments Bank Limited"),3] = "Fino Payments Bank"
+d2[which(d2[,3] == "Fino Payments Bank Limited Fip"),3]="Fino Payments Bank"
+d2[which(d2[,3] == "Equitas Bank"),3]="Equitas Small Finance Bank"
+d2[which(d2[,3] == "Dbs Bank Ltd"),3] = "Dbs Bank India Limited"
+
+aggregate(d2[,5]~d2[,3],data=d2,length)
+aggregate(d1[,5]~d1[,3],data=d1,length)
+
+write.csv(d1,"Beneficiary_Bank_Data.csv")
+write.csv(d2,"Remitter_Bank_Data.csv")
+
+
 df=data   ## regression data xlsx
 ### here we clean the vectors contains NA values 
 ## because pca dont work if there are NA values
