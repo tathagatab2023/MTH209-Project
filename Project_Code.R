@@ -122,3 +122,20 @@ Approve.Benefi=df$Approve.Benefi
 reg=lm(y ~ 1+Total_Volume+DRA+Approve+BD+DRS+BD.Ben+Approve.Benefi)
 summary(reg)
 
+
+#Top 10 Banks
+
+d11= aggregate(Sl_No.~UPI_Beneficiary_Bank,d1,mean)
+d21 =aggregate(Sl_No.~UPI_Remitter_Bank,d2,mean)
+colnames(d11)[1] = "Banks"
+colnames(d21)[1] = "Banks"
+#which(d11$UPI_Beneficiary_Bank %in% intersect(d11[,1],d21[,1]))
+#which(d21$UPI_Remitter_Bank %in% intersect(d11[,1],d21[,1]))
+fin = merge(d11, d21, by = "Banks", all = TRUE)
+colnames(fin)[2:3] = c("Beneficiary_Rank","Remitter Rank") 
+fin[,4] = fin[,2] + fin[,3]
+
+top_banks = fin[order(fin[,4]),][1:10,]
+colnames(top_banks)[4] = "Combined_Rank" 
+
+
