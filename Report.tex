@@ -10,6 +10,8 @@
 
 % Title and authors
 \title{Analyzing and Enhancing the UPI Ecosystem}
+\author{Tathagata Banerjee, Ahana Bose, Rohit Karwa, Ashirvad Pawar, Gunavant Thakare \\ 
+Indian Institute of Technology, Kanpur}
 
 \begin{document}
 
@@ -17,10 +19,36 @@
 
 % Sections
 \section{Introduction}
-Your introduction goes here.
+
+Unified Payments Interface (UPI) has revolutionized digital payments in India, providing an efficient and popular platform for transferring funds between bank accounts. It was developed by the National Payments Corporation of India (NPCI), and has gained immense popularity over the last few years. UPI enables users to link multiple bank accounts to a single application on their phones, eliminating the need for traditional payment methods like cash or cheques. PhonePe,Google Pay and Paytm are some of the leading applications, catering to users of most of the popular banks.
+
+Users can utilize the UPI applications available in their devices to initiate transactions in real-time, 24/7, from anywhere with an internet connection. The system utilizes virtual payment addresses (VPAs), also known as UPI IDs, or mobile numbers linked to bank accounts, ensuring secure and instant fund transfers.
+
+Since its launch, UPI has witnessed massive growth, with millions of transactions being undertaken daily. Today, UPI is used in almost all dimensions of financial transactions, ranging from payment of bank loans,account-to-account transfers to everyday purchases such as food and stationary,just by scanning QR codes provided by the merchants. It is used for bill payments and online purchases as well.
+
+\subsection{About the Dataset}
+
+In this study, we will be analyzing the UPI transactions of the most popular banks over the last few years. The data has been collected from the NPCI official website, since it is considered to be a reliable and official source of information. The dataset contains the information of the top 50 beneficiary and remitter banks and their total volume of transactions, approval amount, business decline, technical decline, total reversal count, debit reversal success amount, deemed approved amount from August 2021 to January 2024. The banks have been ranked on the basis of the total volume remitted and total volume received, respectively.
+
+The different variables of the dataset have been described in the following list. \textbf{R} and \textbf{B} indicate whether the variable considered belongs to the remitter bank data or beneficiary bank data, respectively.
+
+\begin{itemize}
+    \item \textbf{Remitter Bank(R)}: The bank of the account holder who is sending the money.
+    \item \textbf{Beneficiary Bank(B)}: The bank of the account holder who is receiving money.
+    \item \textbf{Total Volume(R/B)}: Total quantity of transactions (in millions) processed in a given month.
+    \item \textbf{Approved Transaction Volume(R/B)}: A transaction marked as approved indicates that it has passed all necessary checks and has been successfully authorized by the sender’s bank and recipient’s bank.
+    \item \textbf{Business Decline (BD)(R/B)}: Transaction decline due to a customer entering an invalid PIN, incorrect beneficiary account, or due to other business reasons such as exceeding per transaction limit, exceeding permitted count of transactions per day, exceeding amount limit for the day, etc.
+    \item \textbf{Technical Decline (TD)(R/B)}: Transaction decline due to technical reasons, such as unavailability of systems and network issues on bank or NPCI side.
+    \item \textbf{Total Debit Reversal Count(R)}: It refers to the total number of transactions (in millions) where a debit has been reversed, which means that the initial debit transaction has been undone and the funds have been returned to the account.
+    \item \textbf{Debit Reversal Success Amount(R)}: Indicates the volume of transactions where a customer account may be debited and their bank is unable to confirm instantly about the status of reversal of such a debit.
+    \item \textbf{Deemed Approved Amount(B)}: Indicates the total volume of transactions, where credit confirmations are not received online from the beneficiary banks for the credit.
+\end{itemize}
+
 
 \section{Methods}
-Describe your methods here.
+
+To analyze the extensive data considered in the study, several methodologies from statistics, probability and linear algebra have been implemented. Since the dataset consists of multiple variables related to the various dimensions of financial transactions, we first apply the method of \textbf{Principal Component Analysis} to potentially identify redundancy in the data and proceed with only the variables containing important information.
+
 
 \section{Results}
 Present your results here.
@@ -35,4 +63,3 @@ Author A, Author B, Author C. (Year). Title of the paper. \textit{Journal Name},
 \end{thebibliography}
 
 \end{document}
-
