@@ -70,38 +70,7 @@ new.transform.data$Total_Volume.ben=vec_numeric2
 mean(vec_numeric2)
 
 
-###   pca
 
-
-df_scaled <- scale(df)  # Centers to mean 0 and scales to sd 1
-
-pca_result <- prcomp(df_scaled, center = TRUE, scale. = TRUE)
-
-# Print summary of PCA results
-summary(pca_result)
-
-# Biplot
-biplot(pca_result)
-
-# Calculate variance explained by each principal component
-var_explained <- pca_result$sdev^2 / sum(pca_result$sdev^2)
-cumsum(var_explained)
-# Plotting the scree plot
-plot(var_explained, xlab = "Principal Component", ylab = "Variance Explained", 
-     type = 'b', pch = 19, main = "Scree Plot")
-
-# Assuming you have a vector of explained variances for each component
-var_explained <- pca_result$sdev^2 / sum(pca_result$sdev^2)
-
-# Calculate the differences in explained variance between successive components
-diffs <- diff(var_explained)
-
-# Find the component just before the explained variance starts to level off significantly
-elbow_point <- which.max(diffs) + 1
-
-print(elbow_point)
-
-###
 ###### regression analysis
 
 y=new_transform_data$Total_Volume.ben
