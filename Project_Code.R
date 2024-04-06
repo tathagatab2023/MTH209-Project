@@ -1,4 +1,4 @@
-####data cleaning
+####  Data Cleaning  ####
 d1 = read.csv("Beneficiary_Bank_Data.csv")[,-1]
 d2 = read.csv("Remitter_Bank_Data.csv")[,-1]
 
@@ -338,4 +338,185 @@ grid.arrange(plot_original,plot_trend, plot_seasonal, plot_random,
 
 
 write.xlsx(ts_data,file="time_series_remitter_data.xlsx")
+
 ##############################################################
+
+#####   K-Mean Clustering   ######
+
+d1 = read.csv("Beneficiary_Bank_Data.csv")
+library(factoextra)
+head(d1)
+
+unique(d1$UPI_Beneficiary_Bank) # To extract total beneficiary banks names
+
+ben_mean <- aggregate(d1$Total_Volume~d1$UPI_Beneficiary_Bank,d1,mean)
+
+d2 <- read.csv("Remitter_Bank_Data.csv")
+
+rem_mean <-  aggregate(d2$Total_Volume~d2$UPI_Remitter_Bank,d2,mean)
+
+ben_mean <-  as.data.frame(ben_mean)
+
+rem_mean <-  as.data.frame(rem_mean)
+
+cb <- intersect(ben_mean[,1],rem_mean[,1])
+
+bindex <-  numeric(length=length(cb))
+
+rindex <-  bindex
+
+for(i in 1:length(cb))
+{
+bindex[i] = which(ben_mean[,1] == cb[i])
+rindex[i] = which(rem_mean[,1] == cb[i])
+}
+
+t = cbind(ben_mean[bindex,],rem_mean[rindex,])
+
+df = cbind(t[,2],t[,4])
+
+rownames(df) = t[,1]
+
+colnames(df) = c("Beneficiary Volume","Remitter Volume")
+
+clusters <- kmeans(df, 5)
+
+fviz_cluster(clusters, df)
+
+######################################################################################
+
+#######     Asymptotic Distribution     #######
+
+######   Remitter Data  ######
+
+rem_data <- read.csv("Top_Remitter_Banks.csv")  # To load the data set
+
+x1 <- rem_data$Time # To extract the column of time 
+
+x2 <- rem_data$Total_Volume
+
+x3 <- rem_data$UPI_Remitter_Bank
+
+data1 <- cbind(x1,x2,x3) 
+
+df <- as.data.frame(data1) 
+
+colnames(df) <- c("Month", "Amount", "Bank")
+
+a <- unique(df$Bank) # To get total Banks
+
+sbi_rem <- df[which(df$Bank == a[1]),] # This will give rows in first two columns which corresponds to the bank a[1]
+
+sbi_rem_volume <- as.numeric(sbi_rem[,2]) # This will give volumes corresponds to bank - a[1]
+
+###################
+
+hdfc_rem <- df[which(df$Bank == a[2]),]
+
+hdfc_rem_volume <- as.numeric(hdfc_rem[,2])
+
+###################
+
+paytm_rem <- df[which(df$Bank == a[6]),]
+
+paytm_rem_volume <- as.numeric(paytm_rem[,2])
+
+#################
+
+Baroda_rem <- df[which(df$Bank == a[4]),]
+
+Baroda_rem_volume <- as.numeric(Baroda_rem[,2])
+
+##################
+
+icici_rem <- df[which(df$Bank == a[5]),]
+
+icici_rem_volume <- as.numeric(icici_rem[,2])
+
+##############  Beneficiary Data  ##################
+
+Ben_data <- read.csv("Top_Beneficiary_Banks.csv")
+
+y1 <- Ben_data$Time
+
+y2 <- Ben_data$UPI_Beneficiary_Bank
+
+y3 <- Ben_data$Total_Volume
+
+data2 <- cbind(y1,y2,y3)
+
+dataframe <- as.data.frame(data2)
+
+colnames(dataframe) <- c("month","Bank","Volume")
+
+u <- unique(dataframe$Bank)
+
+sbi_Ben <- dataframe[which(dataframe$Bank == u[2]),]
+
+sbi_Ben_volume <- as.numeric(sbi_Ben[,3])
+
+##############
+
+hdfc_Ben <- dataframe[which(dataframe$Bank == u[5]),]
+
+hdfc_Ben_volume <- as.numeric(hdfc_Ben[,3])
+
+###############
+
+paytm_Ben <- dataframe[which(dataframe$Bank == u[1]),]
+
+paytm_Ben_volume <- as.numeric(paytm_Ben[,3])
+
+################
+
+Baroda_Ben <- dataframe[which(dataframe$Bank == u[6]),]
+
+Baroda_Ben_volume <- as.numeric(Baroda_Ben[,3])
+
+################
+
+icici_Ben <- dataframe[which(dataframe$Bank == u[3]),]
+
+icici_Ben_volume <- as.numeric(icici_Ben[,3])
+
+################
+
+t1 = cbind(c(u[2],u[5],u[1],u[6],u[3]),c(shapiro.test(sbi_rem_volume)$p,shapiro.test(hdfc_rem_volume)$p,shapiro.test(paytm_rem_volume)$p,shapiro.test(Baroda_rem_volume)$p,shapiro.test(icici_rem_volume)$p))
+
+t1[,2] = round(as.numeric(t1[,2]),2)
+
+t2 = cbind(c(u[2],u[5],u[1],u[6],u[3]),c(shapiro.test(sbi_Ben_volume)$p,shapiro.test(hdfc_Ben_volume)$p,shapiro.test(paytm_Ben_volume)$p,shapiro.test(Baroda_Ben_volume)$p,shapiro.test(icici_Ben_volume)$p))
+
+t2[,2] = round(as.numeric(t2[,2]),2)
+
+shapiro = cbind(t1,t2[,2])
+
+colnames(shapiro) = c("Banks","Remitter p-value","Benif p-value")
+shapiro
+
+write.csv(shapiro,"shapiro test.csv")
+
+####################################################
+
+### Mean and Variance of volumes ###
+
+# Remitter 
+
+rem <-  cbind(sbi_rem_volume,hdfc_rem_volume,paytm_rem_volume,Baroda_rem_volume,icici_rem_volume)
+
+rem <-  rem/1000
+
+a <- rbind(apply(rem,2,mean),apply(rem,2,var))
+
+# Beneficiary
+
+Ben <- cbind(sbi_Ben_volume,hdfc_Ben_volume,paytm_Ben_volume,Baroda_Ben_volume,icici_Ben_volume)
+
+Ben <- Ben/1000
+
+b <-  rbind(apply(Ben,2,mean),apply(Ben,2,var))
+
+write.csv(rbind(a,b),"Top 5 Banks Summary.csv")
+
+
+
